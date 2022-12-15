@@ -1,0 +1,30 @@
+.container {
+  max-width: 400px;
+}
+
+.icons {
+  width: 35px;
+}
+
+input[type=text],
+input[type=text]:focus {
+  color: #fff;
+  border: none;
+  background: rgba(0,0,0,0.2);
+  max-width: 400px;
+}
+
+.list-container li {
+  background: #484E53;
+  margin: 1px 0;
+}
+
+i[data-trash],
+i[data-edit] {
+  cursor: pointer;
+}
+
+.hidden {
+  display: none;
+}
+

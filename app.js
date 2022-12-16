@@ -1,12 +1,9 @@
 const formAddList = document.querySelector('.form-add-todo')
 const listContainer = document.querySelector('.list-container')
+// const formSearch = document.querySelector('.form-search')
 const inputSearchInList = document.querySelector('.form-search input')
 
-formAddList.addEventListener('submit', event => {
-    event.preventDefault()
-    
-    const inputValue = event.target.add.value.trim()
-
+const createItemList = inputValue => {
     if(inputValue.length) {
         listContainer.innerHTML += `
             <li class="list-group-item d-flex justify-content-between align-items-center" data-list="${inputValue}">
@@ -17,36 +14,55 @@ formAddList.addEventListener('submit', event => {
             </li>
         `
     }
+}
+
+const removeItemList = (valueDataTrash) => {
+    const itemInList = document.querySelector(`[data-list="${valueDataTrash}"]`)
+
+    if(valueDataTrash) {
+        itemInList.remove()
+    }
+}
+
+const filterCompleteList = (completeList, inputValueSearch) => {
+    completeList.filter((itemInList => {
+        const findList = itemInList.textContent.toLocaleLowerCase().includes(inputValueSearch)
+        const show = 'd-flex'
+        const hidden = 'hidden'
+        
+        !findList ? showItemInList(itemInList, hidden, show) : showItemInList(itemInList, show, hidden)
+    }))
+}
+
+const showItemInList = (itemInList, show, hidden) => {
+    itemInList.classList.add(show)
+    itemInList.classList.remove(hidden)
+}
+
+formAddList.addEventListener('submit', event => {
+    event.preventDefault()
+    
+    const inputValue = event.target.add.value.trim()
+
+    createItemList(inputValue)
 
     event.target.reset()
 })
 
 listContainer.addEventListener('click', event => {
     const clickedElement = event.target
-    
-    const dataTrashValue = clickedElement.dataset.trash
-    const trashItemInList = document.querySelector(`[data-list="${dataTrashValue}"]`)
+    const valueDataTrash = clickedElement.dataset.trash
 
-    if(dataTrashValue) {
-        trashItemInList.remove()
-    }
-    
+    removeItemList(valueDataTrash)
 })
+
+// formSearch.addEventListener('submit', event => {
+//     event.preventDefault()
+// })
 
 inputSearchInList.addEventListener('input', event => {
     const inputValueSearch = event.target.value.trim().toLowerCase()
     const completeList = Array.from(listContainer.children)
 
-    completeList.filter((itemList => {
-        if(!itemList.textContent.toLocaleLowerCase().includes(inputValueSearch)) {
-            console.log(itemList)
-            itemList.classList.add('hidden')
-            itemList.classList.remove('d-flex')
-        }else {
-            itemList.classList.add('d-flex')
-            itemList.classList.remove('hidden')
-        }
-
-    }))
-
+    filterCompleteList(completeList, inputValueSearch)
 })

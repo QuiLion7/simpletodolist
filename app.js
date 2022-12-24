@@ -21,6 +21,7 @@ const removeItemList = (valueDataTrash) => {
 
     if(valueDataTrash) {
         itemInList.remove()
+        remove(valueDataTrash)
     }
 }
 
@@ -45,6 +46,7 @@ formAddList.addEventListener('submit', event => {
     const inputValue = event.target.add.value.trim()
 
     createItemList(inputValue)
+    save(inputValue)
 
     event.target.reset()
 })

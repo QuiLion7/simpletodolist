@@ -1,7 +1,8 @@
 const formAddList = document.querySelector('.form-add-todo')
 const listContainer = document.querySelector('.list-container')
-// const formSearch = document.querySelector('.form-search')
 const inputSearchInList = document.querySelector('.form-search input')
+
+let todoList = []
 
 const createItemList = inputValue => {
     if(inputValue.length) {
@@ -45,6 +46,7 @@ formAddList.addEventListener('submit', event => {
     const inputValue = event.target.add.value.trim()
 
     createItemList(inputValue)
+    saveLocalStorage(inputValue)
 
     event.target.reset()
 })
@@ -54,11 +56,8 @@ listContainer.addEventListener('click', event => {
     const valueDataTrash = clickedElement.dataset.trash
 
     removeItemList(valueDataTrash)
+    removeLocalStorage(valueDataTrash)
 })
-
-// formSearch.addEventListener('submit', event => {
-//     event.preventDefault()
-// })
 
 inputSearchInList.addEventListener('input', event => {
     const inputValueSearch = event.target.value.trim().toLowerCase()
@@ -66,3 +65,30 @@ inputSearchInList.addEventListener('input', event => {
 
     filterCompleteList(completeList, inputValueSearch)
 })
+
+//LocalStorage
+const updateLocalStorage = () => localStorage.setItem('todoList', JSON.stringify(todoList))
+
+const saveLocalStorage = inputValue => {
+    todoList.push(inputValue)
+    updateLocalStorage()
+}
+
+const removeLocalStorage = inputValue => {
+    if(todoList.includes(inputValue)) {
+        todoList.splice(todoList.indexOf(inputValue), 1)
+    }
+    updateLocalStorage()
+}
+
+const refreshPage = () => {
+    const JSONTodoList = localStorage.getItem('todoList')
+    const todoListConvertedArray = JSON.parse(JSONTodoList)
+    
+    todoListConvertedArray.forEach(itemlist => {
+        todoList.push(itemlist)
+        createItemList(itemlist)
+    })
+}
+
+refreshPage()
